@@ -3,6 +3,7 @@
 #include <rafgl.h>
 #include <player.h>
 #include <asteroids.h>
+#include <collision.h>
 
 static int w, h;
 static rafgl_raster_t raster;
@@ -28,6 +29,12 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
 {
     player_update(&player, delta_time, game_data);
     asteroids_update(delta_time);
+
+    if(collision_player_asteroids(&player))
+    {
+        player_init(&player, w / 2.0f, h / 2.0f);
+        asteroids_init(w, h);
+    }
 
     // klirujemo background
     int x, y;
@@ -55,4 +62,3 @@ void main_state_cleanup(GLFWwindow *window, void *args)
     rafgl_raster_cleanup(&raster);
     rafgl_texture_cleanup(&tex);
 }
-

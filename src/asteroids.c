@@ -84,3 +84,8 @@ void asteroids_draw(rafgl_raster_t *raster)
         rafgl_raster_draw_line(raster, a->pos_x, a->pos_y, line_x, line_y, asteroid_color);
     }
 }
+
+const asteroid_t *asteroids_get_all(void)
+{
+    return asteroids;
+}

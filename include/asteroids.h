@@ -20,5 +20,6 @@ typedef struct
 void asteroids_init(int screen_width, int screen_height);
 void asteroids_update(float delta_time);
 void asteroids_draw(rafgl_raster_t *raster);
+const asteroid_t *asteroids_get_all(void);
 
 #endif
