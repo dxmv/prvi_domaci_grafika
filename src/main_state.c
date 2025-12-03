@@ -2,8 +2,7 @@
 #include <glad/glad.h>
 #include <rafgl.h>
 #include <player.h>
-#include <asteroids.h>
-#include <collision.h>
+#include <stars.h>
 
 static int w, h;
 static rafgl_raster_t raster;
@@ -21,20 +20,14 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
     // inicijalizujemo player-a na sredini ekrana
     player_init(&player, w / 2.0f, h / 2.0f);
 
-    // inicijalizujemo asteroide
-    asteroids_init(w, h);
+    // inicijalizujemo zvezde
+    stars_init(w, h);
 }
 
 void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *game_data, void *args)
 {
     player_update(&player, delta_time, game_data);
-    asteroids_update(delta_time);
-
-    if(collision_player_asteroids(&player))
-    {
-        player_init(&player, w / 2.0f, h / 2.0f);
-        asteroids_init(w, h);
-    }
+    stars_update(delta_time);
 
     // klirujemo background
     int x, y;
@@ -44,8 +37,8 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
         }
     }
     
-    // crtamo asteroide
-    asteroids_draw(&raster);
+    // crtamo zvezde
+    stars_draw(&raster);
 
     // crtamo player-a
     player_draw(&player, &raster);
