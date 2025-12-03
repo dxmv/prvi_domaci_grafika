@@ -1,5 +1,5 @@
 CC = gcc
-IN = main.c src/main_state.c src/player.c src/stars.c src/glad/glad.c
+IN = main.c src/main_state.c src/player.c src/stars.c src/laser.c src/glad/glad.c
 OUT = main.out
 CFLAGS = -Wall -DGLFW_INCLUDE_NONE
 IFLAGS = -I. -I./include

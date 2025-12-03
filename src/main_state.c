@@ -3,6 +3,7 @@
 #include <rafgl.h>
 #include <player.h>
 #include <stars.h>
+#include <laser.h>
 
 static int w, h;
 static rafgl_raster_t raster;
@@ -22,12 +23,24 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
 
     // inicijalizujemo zvezde
     stars_init(w, h);
+    
+    // inicijalizujemo lasere
+    lasers_init();
 }
 
 void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *game_data, void *args)
 {
     player_update(&player, delta_time, game_data);
     stars_update(delta_time);
+    
+    // Pucanje - proveri da li je pritisnut Space
+    if(game_data->keys_pressed[RAFGL_KEY_SPACE])
+    {
+        lasers_spawn(&player);
+    }
+    
+    // Azuriraj lasere
+    lasers_update(delta_time, w, h);
 
     // klirujemo background
     int x, y;
@@ -39,6 +52,9 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     
     // crtamo zvezde
     stars_draw(&raster);
+    
+    // crtamo lasere
+    lasers_draw(&raster);
 
     // crtamo player-a
     player_draw(&player, &raster);
