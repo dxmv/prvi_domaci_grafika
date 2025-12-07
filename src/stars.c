@@ -7,6 +7,7 @@ static int height;
 static star_t stars[MAX_STARS];
 static float time_accumulator = 0.0f;
 
+// inicijalizujemo zvezde
 void stars_init(int screen_width, int screen_height)
 {
     width = screen_width;
@@ -24,6 +25,8 @@ void stars_init(int screen_width, int screen_height)
     }
 }
 
+
+// update zvezda
 void stars_update(float delta_time)
 {
     time_accumulator += delta_time;
@@ -32,11 +35,11 @@ void stars_update(float delta_time)
     {
         star_t *s = &stars[i];
         
-        // Update position
+        // pomeranje zvezda
         s->pos_x += s->vel_x * delta_time;
         s->pos_y += s->vel_y * delta_time;
         
-        // Wrap around screen edges
+        // ivice ekrana
         if(s->pos_x < 0)
         {
             s->pos_x = width;
@@ -54,31 +57,31 @@ void stars_update(float delta_time)
             s->pos_y = 0;
         }
         
-        // Make stars twinkle with sine wave
+        // zvezde svetle sa sinusnom funkcijom
         float phase = time_accumulator * s->twinkle_speed;
         s->brightness = 0.5f + 0.5f * sinf(phase);
     }
 }
 
+// crtamo zvezde
 void stars_draw(rafgl_raster_t *raster)
 {
     for(int i = 0; i < MAX_STARS; i++)
     {
         star_t *s = &stars[i];
         
-        // Calculate color based on brightness
+        // boja na osnovu brightnessa
         int intensity = (int)(stars[i].brightness * 255);
         uint32_t star_color = rafgl_RGB(intensity, intensity, intensity);
         
-        // Draw star as a small circle or point
         if(s->size > 1.5f)
         {
-            // Larger stars
+            // vece zvezde
             rafgl_raster_draw_circle(raster, (int)s->pos_x, (int)s->pos_y, (int)s->size, star_color);
         }
         else
         {
-            // Single pixel stars
+            // pixel zvezde
             if(s->pos_x >= 0 && s->pos_x < width && s->pos_y >= 0 && s->pos_y < height)
             {
                 pixel_at_pm(raster, (int)s->pos_x, (int)s->pos_y).rgba = star_color;

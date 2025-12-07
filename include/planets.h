@@ -17,10 +17,14 @@ typedef struct
     float orbit_radius;
     float orbit_speed;
     float orbit_angle;
+    // Animation parameters
+    float current_frame;
+    float animation_speed;
 } planet_t;
 
 void planets_init(int screen_width, int screen_height);
 void planets_update(float delta_time);
 void planets_draw(rafgl_raster_t *raster);
+void planets_cleanup(void);
 
 #endif

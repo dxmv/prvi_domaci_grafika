@@ -84,6 +84,7 @@ void main_state_render(GLFWwindow *window, void *args)
 
 void main_state_cleanup(GLFWwindow *window, void *args)
 {
+    planets_cleanup();
     rafgl_raster_cleanup(&raster);
     rafgl_texture_cleanup(&tex);
 }
