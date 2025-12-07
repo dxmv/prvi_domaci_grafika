@@ -4,6 +4,7 @@
 #include <player.h>
 #include <stars.h>
 #include <laser.h>
+#include <planets.h>
 
 static int w, h;
 static rafgl_raster_t raster;
@@ -24,6 +25,9 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
     // inicijalizujemo zvezde
     stars_init(w, h);
     
+    // inicijalizujemo planete
+    planets_init(w, h);
+    
     // inicijalizujemo lasere
     lasers_init();
 }
@@ -32,6 +36,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
 {
     player_update(&player, delta_time, game_data);
     stars_update(delta_time);
+    planets_update(delta_time);
     
     // Pucanje - proveri da li je pritisnut Space
     if(game_data->keys_pressed[RAFGL_KEY_SPACE])
@@ -52,6 +57,9 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     
     // crtamo zvezde
     stars_draw(&raster);
+    
+    // crtamo planete
+    planets_draw(&raster);
     
     // crtamo lasere
     lasers_draw(&raster);
