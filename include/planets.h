@@ -3,7 +3,7 @@
 
 #include <rafgl.h>
 
-#define MAX_PLANETS 3
+#define MAX_PLANETS 2
 
 typedef struct
 {
@@ -17,9 +17,10 @@ typedef struct
     float orbit_radius;
     float orbit_speed;
     float orbit_angle;
-    // Animation parameters
+    // animacija
     float current_frame;
     float animation_speed;
+    int sprite_index;  // koji sprite koristi (0 ili 1)
 } planet_t;
 
 void planets_init(int screen_width, int screen_height);
