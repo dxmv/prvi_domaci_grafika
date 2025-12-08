@@ -55,14 +55,14 @@ void check_laser_enemy_collisions(void)
 }
 
 // Check player against all active enemies
-void check_player_enemy_collisions(const player_t *player)
+void check_player_enemy_collisions(player_t *player)
 {
     enemy_t *enemies = enemies_get_all();
     
     for(int i = 0; i < MAX_ENEMIES; i++)
     {
-        if(!enemies[i].active)
-            continue;
+        if(!enemies[i].active || enemies[i].is_dying)
+            continue;  // skip inactive or dying enemies
             
         // Use enemy.size as radius
         float enemy_radius = enemies[i].size / 2.0f;
@@ -71,7 +71,12 @@ void check_player_enemy_collisions(const player_t *player)
                          enemies[i].pos_x, enemies[i].pos_y, enemy_radius))
         {
             printf("Hit!\n");
-            // TODO: Handle collision (damage player, game over, etc.)
+            
+            // Set hit timer to flash red for 20 frames
+            player->hit_timer = 20;
+            
+            // Start death animation for the enemy
+            enemies[i].is_dying = 1;
         }
     }
 }

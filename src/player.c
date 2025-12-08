@@ -9,10 +9,17 @@ void player_init(player_t *player, float start_x, float start_y)
     player->speed = 250.0f;
     player->rotation_speed = 5.0f;
     player->radius = 20.0f;
+    player->hit_timer = 0;
 }
 
 void player_update(player_t *player, float delta_time, const rafgl_game_data_t *game_data)
 {
+    // Decrement hit timer every frame
+    if(player->hit_timer > 0)
+    {
+        player->hit_timer--;
+    }
+    
     if(game_data->keys_down[RAFGL_KEY_A])
     {
         player->angle -= player->rotation_speed * delta_time;
@@ -48,7 +55,19 @@ void player_draw(const player_t *player, rafgl_raster_t *raster)
     int x2 = player->pos_x + (-player->radius * cos_a + player->radius * 0.5f * sin_a);
     int y2 = player->pos_y + (-player->radius * sin_a - player->radius * 0.5f * cos_a);
 
-    uint32_t ship_color = rafgl_RGB(255, 255, 255);
+    // Choose color based on hit timer
+    uint32_t ship_color;
+    if(player->hit_timer > 0)
+    {
+        // Flash red when hit
+        ship_color = rafgl_RGB(255, 0, 0);
+    }
+    else
+    {
+        // Normal white color
+        ship_color = rafgl_RGB(255, 255, 255);
+    }
+    
     rafgl_raster_draw_line(raster, x0, y0, x1, y1, ship_color);
     rafgl_raster_draw_line(raster, x1, y1, x2, y2, ship_color);
     rafgl_raster_draw_line(raster, x2, y2, x0, y0, ship_color);

@@ -11,6 +11,7 @@ typedef struct
     float speed;
     float rotation_speed;
     float radius;
+    int hit_timer;  // frames remaining for red flash effect
 } player_t;
 
 void player_init(player_t *player, float start_x, float start_y);
