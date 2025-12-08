@@ -12,12 +12,16 @@ typedef struct
     float pos_y;
     float size;
     float speed;
+    float scale;      // for scaling effect when dying
+    float alpha;      // for transparency effect when dying
+    int is_dying;     // boolean flag for death animation
     int active;
 } enemy_t;
 
 void enemies_init(int screen_width, int screen_height);
 void enemies_update(float delta_time, player_t *player);
 void enemies_draw(rafgl_raster_t *raster);
+enemy_t* enemies_get_all(void);
 
 #endif
 

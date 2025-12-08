@@ -19,5 +19,6 @@ void lasers_init(void);
 void lasers_spawn(const player_t *player);
 void lasers_update(float delta_time, int screen_width, int screen_height);
 void lasers_draw(rafgl_raster_t *raster);
+laser_t* lasers_get_all(void);
 
 #endif

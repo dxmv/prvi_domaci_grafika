@@ -84,3 +84,8 @@ void lasers_draw(rafgl_raster_t *raster)
                                laser_color);
     }
 }
+
+laser_t* lasers_get_all(void)
+{
+    return lasers;
+}

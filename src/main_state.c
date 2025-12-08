@@ -6,6 +6,7 @@
 #include <laser.h>
 #include <planets.h>
 #include <enemies.h>
+#include <collision.h>
 
 static int w, h;
 static rafgl_raster_t raster;
@@ -51,6 +52,10 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     
     // Azuriraj lasere
     lasers_update(delta_time, w, h);
+    
+    // Proveri kolizije
+    check_laser_enemy_collisions();
+    check_player_enemy_collisions(&player);
 
     // klirujemo background
     int x, y;

@@ -133,3 +133,8 @@ void enemies_draw(rafgl_raster_t *raster)
     }
 }
 
+enemy_t* enemies_get_all(void)
+{
+    return enemies;
+}
+
