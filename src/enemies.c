@@ -17,6 +17,9 @@ void enemies_init(int screen_width, int screen_height)
     for(int i = 0; i < MAX_ENEMIES; i++)
     {
         enemies[i].active = 0;
+        enemies[i].scale = 1.0f;
+        enemies[i].alpha = 1.0f;
+        enemies[i].is_dying = 0;
     }
     
     spawn_timer = 0.0f;
@@ -62,6 +65,9 @@ void enemies_update(float delta_time, player_t *player)
                 
                 enemies[i].size = 15.0f;
                 enemies[i].speed = 50.0f + (rand() % 50);  // Random speed between 50-100
+                enemies[i].scale = 1.0f;
+                enemies[i].alpha = 1.0f;
+                enemies[i].is_dying = 0;
                 enemies[i].active = 1;
                 break;  // Only spawn one enemy per interval
             }
@@ -75,6 +81,23 @@ void enemies_update(float delta_time, player_t *player)
             continue;
             
         enemy_t *e = &enemies[i];
+        
+        // ako neprijatelj umire, azuriramo death animation
+        if(e->is_dying)
+        {
+            e->scale -= 0.05f;
+            e->alpha -= 0.05f;
+            
+            // ako je alpha pao na 0 ili ispod, deaktiviramo neprijatelja
+            if(e->alpha <= 0.0f)
+            {
+                e->active = 0;
+                e->is_dying = 0;
+                e->scale = 1.0f;
+                e->alpha = 1.0f;
+            }
+            continue;  // ne pomeramo neprijatelja dok umire
+        }
         
         // izracunamo vektor smera ka player-u
         float dx = player->pos_x - e->pos_x;
@@ -103,8 +126,6 @@ void enemies_update(float delta_time, player_t *player)
 // crtamo neprijatelje
 void enemies_draw(rafgl_raster_t *raster)
 {
-    uint32_t red_color = rafgl_RGB(255, 0, 0);
-    
     for(int i = 0; i < MAX_ENEMIES; i++)
     {
         if(!enemies[i].active)
@@ -112,21 +133,51 @@ void enemies_draw(rafgl_raster_t *raster)
             
         enemy_t *e = &enemies[i];
         
-        // crtamo neprijatelja kao ispunjeni crveni pravougaonik
-        int half_size = (int)(e->size / 2.0f);
+        // apply scale to size
+        float scaled_size = e->size * e->scale;
+        
+        // calculate alpha as 0-255 value
+        int alpha_value = (int)(e->alpha * 255.0f);
+        if(alpha_value < 0) alpha_value = 0;
+        if(alpha_value > 255) alpha_value = 255;
+        
+        // create color with alpha blending
+        uint32_t red_color = rafgl_RGB(255, 0, 0);
+        
+        // crtamo neprijatelja kao ispunjeni crveni pravougaonik sa scaling i alpha
+        int half_size = (int)(scaled_size / 2.0f);
         int x1 = (int)(e->pos_x - half_size);
         int y1 = (int)(e->pos_y - half_size);
         int x2 = (int)(e->pos_x + half_size);
         int y2 = (int)(e->pos_y + half_size);
         
-        // crtamo ispunjeni pravougaonik
+        // crtamo ispunjeni pravougaonik sa alpha blending
         for(int y = y1; y <= y2; y++)
         {
             for(int x = x1; x <= x2; x++)
             {
                 if(x >= 0 && x < raster->width && y >= 0 && y < raster->height)
                 {
-                    pixel_at_pm(raster, x, y).rgba = red_color;
+                    if(e->alpha >= 1.0f)
+                    {
+                        // full opacity - just draw the color
+                        pixel_at_pm(raster, x, y).rgba = red_color;
+                    }
+                    else
+                    {
+                        // alpha blend with background
+                        rafgl_pixel_rgb_t bg = pixel_at_pm(raster, x, y);
+                        int bg_r = bg.r;
+                        int bg_g = bg.g;
+                        int bg_b = bg.b;
+                        
+                        // blend red color with background
+                        int final_r = (int)(255 * e->alpha + bg_r * (1.0f - e->alpha));
+                        int final_g = (int)(0 * e->alpha + bg_g * (1.0f - e->alpha));
+                        int final_b = (int)(0 * e->alpha + bg_b * (1.0f - e->alpha));
+                        
+                        pixel_at_pm(raster, x, y).rgba = rafgl_RGB(final_r, final_g, final_b);
+                    }
                 }
             }
         }

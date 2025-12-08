@@ -31,8 +31,8 @@ void check_laser_enemy_collisions(void)
             
         for(int j = 0; j < MAX_ENEMIES; j++)
         {
-            if(!enemies[j].active)
-                continue;
+            if(!enemies[j].active || enemies[j].is_dying)
+                continue;  // skip inactive or already dying enemies
                 
             // Use enemy.size as radius (size is the full diameter, so divide by 2)
             float enemy_radius = enemies[j].size / 2.0f;
@@ -41,7 +41,14 @@ void check_laser_enemy_collisions(void)
                              enemies[j].pos_x, enemies[j].pos_y, enemy_radius))
             {
                 printf("Hit!\n");
-                // TODO: Handle collision (deactivate laser and enemy, add score, etc.)
+                
+                // Start the death animation for the enemy
+                enemies[j].is_dying = 1;
+                
+                // Deactivate the laser immediately
+                lasers[i].active = 0;
+                
+                break;  // laser can only hit one enemy, so break inner loop
             }
         }
     }
