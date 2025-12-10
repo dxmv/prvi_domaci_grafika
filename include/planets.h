@@ -10,7 +10,6 @@ typedef struct
     float pos_x;
     float pos_y;
     float radius;
-    uint32_t color;
     // Orbital parameters
     float orbit_center_x;
     float orbit_center_y;
@@ -19,7 +18,6 @@ typedef struct
     float orbit_angle;
     // animacija
     float current_frame;
-    float animation_speed;
     int sprite_index;  // koji sprite koristi (0 ili 1)
 } planet_t;
 

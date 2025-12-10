@@ -1,22 +1,19 @@
-# Todo
 
-### 1. Planets
-- [ ] figure out how spritesheets work
-- [ ] find 2 or 3 planet spritesheets
-- [ ] make planets go around the screen
+### Stars
+- Twinkle
+- Mulitple colors
+- Move around 
+- Bounce
 
-### 2. Stars
-- [ ] figure out what procedural generation is
-- [ ] use different colors for stars, and make them a bit smaller and less stars
+### Planets
+- 2 different spritesheets 
+- each sprite has 50 frames
+- goes in a circle
 
-### 3. Enemies
-- [ ] Use again a png
-- [ ] Make them move slowly towards player
-- [ ] When all defeated respawn with 1 more or something like that
+### Ship
+- Simple triangle
 
-### 4. Ship
-- [ ] Use a png
-- [ ] Improve movement
+
 
 ### 5. Laser
 - [ ] Make it have kind of like a white shade?

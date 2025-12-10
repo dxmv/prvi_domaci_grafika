@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stars.h>
 #include <rafgl.h>
+#include <planets.h>
 
 static int w, h;
 static rafgl_raster_t raster;
@@ -21,14 +22,17 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
     // inicijalizacija star sistema
     stars_init(w,h);
 
+    // inicijalizacija planeta
+    planets_init(w,h);
+
 }
 
 void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *game_data, void *args)
 {
     // updatujemo stvari ovde
-
     stars_update(delta_time);
-    
+    planets_update(delta_time);
+
     int x,y;
     //    dvostrukom for petljom prolazimo kroz svaki piksel rastera
     //    tacka (0, 0) je gornji levi ugao slike a tacka (w-1, h-1) je donji desni ugao
@@ -50,6 +54,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
 
     // crtamo ovde stvari
     stars_draw(&raster);
+    planets_draw(&raster);
 }
 
 void main_state_render(GLFWwindow *window, void *args)
@@ -69,4 +74,5 @@ void main_state_render(GLFWwindow *window, void *args)
 void main_state_cleanup(GLFWwindow *window, void *args)
 {
     // stars_cleanup();
+    planets_cleanup();
 }
