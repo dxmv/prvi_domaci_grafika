@@ -13,6 +13,8 @@ typedef struct
     float vel_x;
     float vel_y;
     int active;
+    int is_expanding;
+    float current_width;
 } laser_t;
 
 void lasers_init(void);

@@ -17,7 +17,9 @@
 ### Lasers
 - Handles user input
 - Shoots from direction of player
-- Cool shader effect
+- Expands until some width
+- Gets thicker
+- To add cool gradient effect
 
 ### Enemies
 
