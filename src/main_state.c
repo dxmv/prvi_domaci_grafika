@@ -4,10 +4,13 @@
 #include <stars.h>
 #include <rafgl.h>
 #include <planets.h>
+#include <player.h>
+#include <laser.h>
 
 static int w, h;
 static rafgl_raster_t raster;
 static rafgl_texture_t tex;
+static player_t player;
 
 void main_state_init(GLFWwindow *window, void *args, int width, int height)
 {
@@ -25,14 +28,29 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
     // inicijalizacija planeta
     planets_init(w,h);
 
+    // inicijalizacija player-a
+    player_init(&player, w, h);
+
+    // inicijalizacija lasera
+    lasers_init();
+
 }
 
 void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *game_data, void *args)
 {
+
+
     // updatujemo stvari ovde
     stars_update(delta_time);
     planets_update(delta_time);
+    player_update(&player, delta_time, game_data);
 
+    // handle laser input
+    if(game_data->keys_pressed[RAFGL_KEY_SPACE])
+    {
+        lasers_spawn(&player);
+    }
+    lasers_update(delta_time, w, h);
     int x,y;
     //    dvostrukom for petljom prolazimo kroz svaki piksel rastera
     //    tacka (0, 0) je gornji levi ugao slike a tacka (w-1, h-1) je donji desni ugao
@@ -55,6 +73,8 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     // crtamo ovde stvari
     stars_draw(&raster);
     planets_draw(&raster);
+    lasers_draw(&raster);
+    player_draw(&player, &raster);
 }
 
 void main_state_render(GLFWwindow *window, void *args)

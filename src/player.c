@@ -1,10 +1,10 @@
 #include <player.h>
 #include <math.h>
 
-void player_init(player_t *player, float start_x, float start_y)
+void player_init(player_t *player, float width, float height)
 {
-    player->pos_x = start_x;
-    player->pos_y = start_y;
+    player->pos_x = width * 0.5f;
+    player->pos_y = height * 0.5f;
     player->angle = 0.0f;
     player->speed = 250.0f;
     player->rotation_speed = 5.0f;
@@ -14,11 +14,11 @@ void player_init(player_t *player, float start_x, float start_y)
 
 void player_update(player_t *player, float delta_time, const rafgl_game_data_t *game_data)
 {
-    // Decrement hit timer every frame
-    if(player->hit_timer > 0)
-    {
-        player->hit_timer--;
-    }
+    // // Decrement hit timer every frame
+    // if(player->hit_timer > 0)
+    // {
+    //     player->hit_timer--;
+    // }
     
     if(game_data->keys_down[RAFGL_KEY_A])
     {
@@ -56,17 +56,19 @@ void player_draw(const player_t *player, rafgl_raster_t *raster)
     int y2 = player->pos_y + (-player->radius * sin_a - player->radius * 0.5f * cos_a);
 
     // Choose color based on hit timer
-    uint32_t ship_color;
-    if(player->hit_timer > 0)
-    {
-        // Flash red when hit
-        ship_color = rafgl_RGB(255, 0, 0);
-    }
-    else
-    {
-        // Normal white color
-        ship_color = rafgl_RGB(255, 255, 255);
-    }
+    // uint32_t ship_color;
+    // if(player->hit_timer > 0)
+    // {
+    //     // Flash red when hit
+    //     ship_color = rafgl_RGB(255, 0, 0);
+    // }
+    // else
+    // {
+    //     // Normal white color
+    //     ship_color = rafgl_RGB(255, 255, 255);
+    // }
+    uint32_t ship_color = rafgl_RGB(255, 255, 255);
+
     
     rafgl_raster_draw_line(raster, x0, y0, x1, y1, ship_color);
     rafgl_raster_draw_line(raster, x1, y1, x2, y2, ship_color);

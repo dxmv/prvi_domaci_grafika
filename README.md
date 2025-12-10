@@ -12,6 +12,16 @@
 
 ### Ship
 - Simple triangle
+- Reacts to controls, rotations on A/D, move forward
+
+### Lasers
+- Handles user input
+- Shoots from direction of player
+- Cool shader effect
+
+### Enemies
+
+###
 
 
 
