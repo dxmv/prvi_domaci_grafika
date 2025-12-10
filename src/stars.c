@@ -13,24 +13,31 @@ void stars_init(int screen_width, int screen_height)
     width = screen_width;
     height = screen_height;
 
+    uint32_t yellow = rafgl_RGB(255, 255, 0);
+    uint32_t white = rafgl_RGB(255, 255, 255);
+
+    uint32_t colors[2] = {yellow, white};
+
     for(int i = 0; i < MAX_STARS; i++)
     {
+        // random stvari za svaku zvezdu
         stars[i].pos_x = (float)(rand() % width);
         stars[i].pos_y = (float)(rand() % height);
-        stars[i].vel_x = ((float)rand() / RAND_MAX - 0.5f) * 20.0f;
-        stars[i].vel_y = ((float)rand() / RAND_MAX - 0.5f) * 20.0f;
+        stars[i].vel_x = ((float)rand() / RAND_MAX - 0.5f) * 10.0f;
+        stars[i].vel_y = ((float)rand() / RAND_MAX - 0.5f) * 10.0f;
         stars[i].brightness = 0.5f + ((float)rand() / RAND_MAX) * 0.5f;
         stars[i].twinkle_speed = 0.5f + ((float)rand() / RAND_MAX) * 2.0f;
         stars[i].size = 1.0f + ((float)rand() / RAND_MAX) * 2.0f;
+        stars[i].color = colors[rand() % 2];
     }
 }
 
-
-// update zvezda
 void stars_update(float delta_time)
 {
+    // azuriraj vreme
     time_accumulator += delta_time;
     
+    // pomeranje zvezda
     for(int i = 0; i < MAX_STARS; i++)
     {
         star_t *s = &stars[i];
@@ -38,54 +45,70 @@ void stars_update(float delta_time)
         // pomeranje zvezda
         s->pos_x += s->vel_x * delta_time;
         s->pos_y += s->vel_y * delta_time;
+        float precnik = s->size * M_PI*2;
         
-        // ivice ekrana
+        // ivice ekrana - odbijanje (bounce)
         if(s->pos_x < 0)
         {
-            s->pos_x = width;
+            s->pos_x = precnik;
+            s->vel_x = -s->vel_x; // obrni smer
         }
-        if(s->pos_x > width)
+        if(s->pos_x + precnik > width)
         {
-            s->pos_x = 0;
+            s->pos_x = width - precnik;
+            s->vel_x = -s->vel_x; // obrni smer
         }
         if(s->pos_y < 0)
         {
-            s->pos_y = height;
+            s->pos_y = precnik;
+            s->vel_y = -s->vel_y; // obrni smer
         }
-        if(s->pos_y > height)
+        if(s->pos_y + precnik > height)
         {
-            s->pos_y = 0;
+            s->pos_y = height - precnik;
+            s->vel_y = -s->vel_y; // obrni smer
         }
         
         // zvezde svetle sa sinusnom funkcijom
         float phase = time_accumulator * s->twinkle_speed;
-        s->brightness = 0.5f + 0.5f * sinf(phase);
+        s->brightness = sinf(phase) * 0.3f + 0.5f;
     }
 }
 
-// crtamo zvezde
+
+// crtamo zvezde 
 void stars_draw(rafgl_raster_t *raster)
 {
     for(int i = 0; i < MAX_STARS; i++)
     {
-        star_t *s = &stars[i];
+        star_t *star = &stars[i];
         
-        // boja na osnovu brightnessa
-        int intensity = (int)(stars[i].brightness * 255);
-        uint32_t star_color = rafgl_RGB(intensity, intensity, intensity);
+        // ekstraktuj RGB komponente iz uint32_t color
+        int r = (star->color >> 0) & 0xFF;
+        int g = (star->color >> 8) & 0xFF;
+        int b_color = (star->color >> 16) & 0xFF;
         
-        if(s->size > 1.5f)
+        // primeni brightness na svaku komponentu
+        float brightness = star->brightness;
+        int r_final = (int)(r * brightness);
+        int g_final = (int)(g * brightness);
+        int b_final = (int)(b_color * brightness);
+        
+        uint32_t star_color = rafgl_RGB(r_final, g_final, b_final);
+        // crtamo zvezdu samo ako je unutar ekrana
+        if(star->pos_x < 0 || star->pos_x > width || star->pos_y < 0 || star->pos_y > height)
         {
-            // vece zvezde
-            rafgl_raster_draw_circle(raster, (int)s->pos_x, (int)s->pos_y, (int)s->size, star_color);
+            continue;
+        }
+        // crtamo ili kao krug ili kao pixel
+        if(star->size > 1.5f)
+        {
+            rafgl_raster_draw_circle(raster, star->pos_x, star->pos_y, (int)star->size, star_color);
         }
         else
         {
-            // pixel zvezde
-            if(s->pos_x >= 0 && s->pos_x < width && s->pos_y >= 0 && s->pos_y < height)
-            {
-                pixel_at_pm(raster, (int)s->pos_x, (int)s->pos_y).rgba = star_color;
-            }
+            pixel_at_pm(raster, (int)star->pos_x, (int)star->pos_y).rgba = star_color;
         }
     }
 }
+

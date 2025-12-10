@@ -3,7 +3,7 @@
 
 #include <rafgl.h>
 
-#define MAX_STARS 200
+#define MAX_STARS 225
 
 typedef struct
 {
@@ -14,10 +14,12 @@ typedef struct
     float brightness;
     float twinkle_speed;
     float size;
+    uint32_t color;
 } star_t;
 
 void stars_init(int screen_width, int screen_height);
 void stars_update(float delta_time);
 void stars_draw(rafgl_raster_t *raster);
+void stars_cleanup(void);
 
 #endif
