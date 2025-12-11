@@ -22,13 +22,15 @@
 - To add cool gradient effect
 
 ### Enemies
+- Basic red squares
+- Spawn randomly
+- Follow the player
+- Have an alpha and scale animation, alpha and scale gets smaller when they're dead
 
-###
+### Animations
+- Collison laser - enemy
 
 
-
-### 5. Laser
-- [ ] Make it have kind of like a white shade?
 
 ### 6. Animations
 - [ ] Collision when laser hits enemy

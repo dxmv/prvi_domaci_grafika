@@ -6,6 +6,8 @@
 #include <planets.h>
 #include <player.h>
 #include <laser.h>
+#include <enemies.h>
+#include <collision.h>
 
 static int w, h;
 static rafgl_raster_t raster;
@@ -34,6 +36,8 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
     // inicijalizacija lasera
     lasers_init();
 
+    enemies_init(w,h);
+
 }
 
 void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *game_data, void *args)
@@ -43,6 +47,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     // updatujemo stvari ovde
     stars_update(delta_time);
     planets_update(delta_time);
+    enemies_update(delta_time, &player);
     player_update(&player, delta_time, game_data);
 
     // handle laser input
@@ -51,6 +56,10 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
         lasers_spawn(&player);
     }
     lasers_update(delta_time, w, h);
+
+    // kolizije
+    check_laser_enemy_collisions();
+    check_player_enemy_collisions(&player);
     int x,y;
     //    dvostrukom for petljom prolazimo kroz svaki piksel rastera
     //    tacka (0, 0) je gornji levi ugao slike a tacka (w-1, h-1) je donji desni ugao
@@ -75,6 +84,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     planets_draw(&raster);
     lasers_draw(&raster);
     player_draw(&player, &raster);
+    enemies_draw(&raster);
 }
 
 void main_state_render(GLFWwindow *window, void *args)

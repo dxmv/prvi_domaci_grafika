@@ -6,7 +6,7 @@ static int width;
 static int height;
 static enemy_t enemies[MAX_ENEMIES];
 static float spawn_timer = 0.0f;
-static float spawn_interval = 5.0f;  // neprijatelj se pojavljuje svakih spawn_interval sekundi
+static float spawn_interval = 2.0f;  // neprijatelj se pojavljuje svakih spawn_interval sekundi
 
 // inicijalizujemo neprijatelje
 void enemies_init(int screen_width, int screen_height)
@@ -27,25 +27,24 @@ void enemies_init(int screen_width, int screen_height)
 
 void enemies_update(float delta_time, player_t *player)
 {
-    // azuriramo spawn timer
+    // azuriramo tajmer
     spawn_timer += delta_time;
     
-    // ako je timer veci od spawn_interval i imamo neaktivne neprijatelje, spawnujemo novog neprijatelja
+    // ako je tajmer veci od spawn_interval i imamo neaktivne neprijatelje, spawnujemo novog neprijatelja
     if(spawn_timer >= spawn_interval)
     {
         spawn_timer = 0.0f;
         
-        // nadji neaktivnu poziciju za neprijatelja
         for(int i = 0; i < MAX_ENEMIES; i++)
         {
             if(!enemies[i].active)
             {
-                // spawnujemo neprijatelja na slucajnoj ivici ekrana
-                int edge = rand() % 4;  // 0=top, 1=right, 2=bottom, 3=left
+                // spawnujemo neprijatelja na random ivici ekrana
+                int edge = rand() % 4;  
                 
                 switch(edge)
                 {
-                    case 0: // Top
+                    case 0: 
                         enemies[i].pos_x = (float)(rand() % width);
                         enemies[i].pos_y = -20.0f;
                         break;
@@ -69,7 +68,7 @@ void enemies_update(float delta_time, player_t *player)
                 enemies[i].alpha = 1.0f;
                 enemies[i].is_dying = 0;
                 enemies[i].active = 1;
-                break;  // Only spawn one enemy per interval
+                break;  // samo jedan neprijatelj po intervalu
             }
         }
     }
@@ -82,13 +81,13 @@ void enemies_update(float delta_time, player_t *player)
             
         enemy_t *e = &enemies[i];
         
-        // ako neprijatelj umire, azuriramo death animation
+        // animacija
         if(e->is_dying)
         {
             e->scale -= 0.05f;
             e->alpha -= 0.05f;
             
-            // ako je alpha pao na 0 ili ispod, deaktiviramo neprijatelja
+            // ako je alpha < 0, deaktiviramo neprijatelja
             if(e->alpha <= 0.0f)
             {
                 e->active = 0;
@@ -96,7 +95,7 @@ void enemies_update(float delta_time, player_t *player)
                 e->scale = 1.0f;
                 e->alpha = 1.0f;
             }
-            continue;  // ne pomeramo neprijatelja dok umire
+            continue;  // ne pomeramo neprijatelja dok se ne umre
         }
         
         // izracunamo vektor smera ka player-u
@@ -133,15 +132,15 @@ void enemies_draw(rafgl_raster_t *raster)
             
         enemy_t *e = &enemies[i];
         
-        // apply scale to size
+        // skaliramo velicinu
         float scaled_size = e->size * e->scale;
         
-        // calculate alpha as 0-255 value
+        // izracunamo alpha kao 0-255 vrednost
         int alpha_value = (int)(e->alpha * 255.0f);
         if(alpha_value < 0) alpha_value = 0;
         if(alpha_value > 255) alpha_value = 255;
         
-        // create color with alpha blending
+        // boja sa alpha
         uint32_t red_color = rafgl_RGB(255, 0, 0);
         
         // crtamo neprijatelja kao ispunjeni crveni pravougaonik sa scaling i alpha
@@ -151,7 +150,7 @@ void enemies_draw(rafgl_raster_t *raster)
         int x2 = (int)(e->pos_x + half_size);
         int y2 = (int)(e->pos_y + half_size);
         
-        // crtamo ispunjeni pravougaonik sa alpha blending
+        // ispunjeni kvadrat sa alpha
         for(int y = y1; y <= y2; y++)
         {
             for(int x = x1; x <= x2; x++)
@@ -160,12 +159,10 @@ void enemies_draw(rafgl_raster_t *raster)
                 {
                     if(e->alpha >= 1.0f)
                     {
-                        // full opacity - just draw the color
                         pixel_at_pm(raster, x, y).rgba = red_color;
                     }
                     else
                     {
-                        // alpha blend with background
                         rafgl_pixel_rgb_t bg = pixel_at_pm(raster, x, y);
                         int bg_r = bg.r;
                         int bg_g = bg.g;
