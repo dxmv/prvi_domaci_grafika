@@ -85,6 +85,32 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     lasers_draw(&raster);
     player_draw(&player, &raster);
     enemies_draw(&raster);
+    
+    // beli flashbeng efekat
+    if(player.hit_timer > 0)
+    {
+        float intensity;
+        int flash_alpha;
+        rafgl_pixel_rgb_t current;
+        
+        intensity = (float)player.hit_timer / 20.0f;
+        flash_alpha = (int)(intensity * 180.0f); 
+        
+        for(y = 0; y < h; y++)
+        {
+            for(x = 0; x < w; x++)
+            {
+                current = pixel_at_m(raster, x, y);
+                
+                // blendovanje bele svjetlosti sa trenutnim pikselom
+                current.r = current.r + (255 - current.r) * flash_alpha / 255;
+                current.g = current.g + (255 - current.g) * flash_alpha / 255;
+                current.b = current.b + (255 - current.b) * flash_alpha / 255;
+                
+                pixel_at_m(raster, x, y) = current;
+            }
+        }
+    }
 }
 
 void main_state_render(GLFWwindow *window, void *args)

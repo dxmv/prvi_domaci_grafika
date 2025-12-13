@@ -13,6 +13,7 @@
 ### Ship
 - Simple triangle
 - Reacts to controls, rotations on A/D, move forward
+- Color change when hit by enemy
 
 ### Lasers
 - Handles user input
@@ -29,20 +30,16 @@
 
 ### Animations
 - Collison laser - enemy
+- Collison player - enemy
 
 
-
-### 6. Animations
-- [ ] Collision when laser hits enemy
-- [ ] Particles for above
-- [ ] Change color of enemy for a second
-- [ ] Fade out when killed
-- [ ] Collisong player and enemy
-- [ ] Particles
-- [ ] Maybe that shrinking mario effect
-
-### 7. Additions
-- [ ] Ship recoil
+### Additions?
+- [ ] Ship sprite
+- [ ] Particles on hits
+- [ ] Trail effect behind the ship
+- [ ] Pulsing around planets?
+- [ ] Procedural starfield
+- [x] Simple post-processing (screen flash on hit)
 - [ ] Nebulla stripe
 - [ ] Hearts
 - [ ] Display how many enemies killed
