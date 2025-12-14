@@ -34,7 +34,7 @@
 
 
 ### Additions?
-- [ ] Particles on hits
+- [x] Particles on hits
 - [x] Simple post-processing (screen flash on hit)
 - [x] Hearts
 - [ ] Empty hearts?

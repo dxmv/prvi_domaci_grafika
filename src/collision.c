@@ -2,6 +2,7 @@
 #include <heart.h>
 #include <math.h>
 #include <stdio.h>
+#include <particles.h>
 
 // Generic collision check using distance formula
 // Returns 1 if two circles overlap, 0 otherwise
@@ -49,6 +50,9 @@ void check_laser_enemy_collisions(player_t *player)
                 
                 // Deactivate the laser immediately
                 lasers[i].active = 0;
+                
+                // Spawn particles at enemy position (count: 20, radius: 10)
+                particles_spawn(enemies[j].pos_x, enemies[j].pos_y, 20, 10.0f);
                 
                 break;  // laser can only hit one enemy, so break inner loop
             }

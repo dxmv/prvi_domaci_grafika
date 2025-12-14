@@ -10,6 +10,7 @@
 #include <collision.h>
 #include <heart.h>
 #include <item.h>
+#include <particles.h>
 
 #define ITEM_SPAWN_INTERVAL_INCREMENT 1
 
@@ -48,6 +49,8 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
 
     items_init();
 
+    particles_init(w,h);
+
 }
 
 void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *game_data, void *args)
@@ -74,6 +77,8 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
         lasers_spawn(&player);
     }
     lasers_update(delta_time, w, h);
+
+    particles_update(delta_time);
 
     // kolizije
     check_laser_enemy_collisions(&player);
@@ -108,6 +113,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     stars_draw(&raster);
     planets_draw(&raster);
     lasers_draw(&raster);
+    particles_draw(&raster);
     player_draw(&player, &raster);
     enemies_draw(&raster);
     heart_draw(&player, &raster);
@@ -165,6 +171,7 @@ void main_state_cleanup(GLFWwindow *window, void *args)
     planets_cleanup();
     heart_cleanup();
     items_cleanup();
+    particles_cleanup();
 }
 
 void main_state_reset_run(void)
@@ -181,6 +188,7 @@ void main_state_reset_run(void)
     planets_init(w, h);
     heart_init(&player);
     items_init();
+    particles_init(w,h);
     // game over logika
     game_over = 1;
     printf("Game over!\n");
