@@ -1,6 +1,5 @@
 #include <item.h>
 
-#define MAX_ITEMS 3
 static item_t items[MAX_ITEMS];
 
 void items_init(void)

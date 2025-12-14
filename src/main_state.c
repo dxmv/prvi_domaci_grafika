@@ -78,6 +78,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     // kolizije
     check_laser_enemy_collisions(&player);
     check_player_enemy_collisions(&player);
+    check_player_item_collisions(&player);
     heart_update(&player);
     if(player.score >= item_spawn_interval){
         items_spawn(&raster);

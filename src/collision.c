@@ -1,4 +1,5 @@
 #include <collision.h>
+#include <heart.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -71,8 +72,7 @@ void check_player_enemy_collisions(player_t *player)
         if(check_collision(player->pos_x, player->pos_y, player->radius,
                          enemies[i].pos_x, enemies[i].pos_y, enemy_radius))
         {
-            printf("Hit! -1 point\n");
-            player->score--;
+            printf("Hit!\n");
             
             // Set hit timer to flash red for 20 frames
             player->hit_timer = 20;
@@ -83,6 +83,30 @@ void check_player_enemy_collisions(player_t *player)
             
             // Start death animation for the enemy
             enemies[i].is_dying = 1;
+        }
+    }
+}
+
+void check_player_item_collisions(player_t *player)
+{
+    item_t *items = items_get_all();
+    for(int i = 0; i < MAX_ITEMS; i++)
+    {
+        if(!items[i].active)
+            continue;
+        if(check_collision(player->pos_x, player->pos_y, player->radius,
+                         items[i].pos_x, items[i].pos_y, items[i].width / 2.0f))
+        {
+            if(player->health < MAX_HEARTS)
+            {
+                printf("+1 health\n");
+                player->health++;
+            }
+            else
+            {
+                printf("Health is already full!\n");
+            }
+            items[i].active = 0;
         }
     }
 }

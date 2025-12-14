@@ -1,5 +1,7 @@
 #include <heart.h>
 
+
+
 static heart_t* hearts;
 static rafgl_raster_t heart_raster;
 static int active_hearts;
@@ -9,11 +11,10 @@ static int heart_width = 32;
 void heart_init(player_t *player)
 {
     rafgl_raster_load_from_image(&heart_raster, "res/heart.png");
-    // niz od player health elemenata
-    hearts = (heart_t*)malloc(player->health * sizeof(heart_t));
+    hearts = (heart_t*)malloc(MAX_HEARTS * sizeof(heart_t));
     active_hearts = player->health;
     int padding = 10;
-    for(int i = 0; i < active_hearts; i++)
+    for(int i = 0; i < MAX_HEARTS; i++)
     {
         hearts[i].pos_x = padding + i * (heart_raster.width + padding);
         hearts[i].pos_y = padding;
@@ -22,9 +23,10 @@ void heart_init(player_t *player)
 
 void heart_update(player_t *player)
 {
-
-    previous_hearts = active_hearts;
     active_hearts = player->health;
+    if(active_hearts > MAX_HEARTS)
+        active_hearts = MAX_HEARTS;
+
 }
 
 void heart_draw(player_t *player, rafgl_raster_t *raster){

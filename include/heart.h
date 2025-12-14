@@ -4,6 +4,8 @@
 #include <rafgl.h>
 #include <player.h>
 
+#define MAX_HEARTS 5
+
 typedef struct
 {
     int pos_x;

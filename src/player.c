@@ -10,7 +10,7 @@ void player_init(player_t *player, float width, float height)
     player->rotation_speed = 5.0f;
     player->radius = 20.0f;
     player->hit_timer = 0;
-    player->health = 1;
+    player->health = 4;
     player->score = 0;
 }
 

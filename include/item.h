@@ -3,6 +3,8 @@
 
 #include <rafgl.h>
 
+#define MAX_ITEMS 3
+
 typedef struct
 {
     float pos_x;
