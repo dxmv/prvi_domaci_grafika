@@ -14,6 +14,7 @@ static int w, h;
 static rafgl_raster_t raster;
 static rafgl_texture_t tex;
 static player_t player;
+static int game_over = 0;
 
 void main_state_init(GLFWwindow *window, void *args, int width, int height)
 {
@@ -45,6 +46,15 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
 
 void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *game_data, void *args)
 {
+    if(game_over)
+    {
+        printf("Game over!\n");
+        if (game_data->keys_pressed[RAFGL_KEY_R])
+        {
+            game_over = 0;
+        }
+        return;
+    }
 
 
     // updatujemo stvari ovde
@@ -90,6 +100,11 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     player_draw(&player, &raster);
     enemies_draw(&raster);
     heart_draw(&player, &raster);
+    if(player.health <= 0)
+    {
+        main_state_reset_run();
+        return;
+    }
     // beli flashbeng efekat
     if(player.hit_timer > 0)
     {
@@ -115,6 +130,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
             }
         }
     }
+
 }
 
 void main_state_render(GLFWwindow *window, void *args)
@@ -136,4 +152,21 @@ void main_state_cleanup(GLFWwindow *window, void *args)
     // stars_cleanup();
     planets_cleanup();
     heart_cleanup();
+}
+
+void main_state_reset_run(void)
+{
+    // Clean up heart array before reinitializing
+    heart_cleanup();
+    
+    // Reinitialize game systems
+    player_init(&player, w, h);
+    lasers_init();
+    enemies_init(w, h);
+    
+    // Optionally reinitialize background for variety
+    stars_init(w, h);
+    planets_init(w, h);
+    heart_init(&player);
+    game_over = 1;
 }

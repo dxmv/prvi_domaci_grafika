@@ -22,9 +22,7 @@ void heart_init(player_t *player)
 
 void heart_update(player_t *player)
 {
-    if(player->health < 0){
-        player->health = 0;
-    }
+
     previous_hearts = active_hearts;
     active_hearts = player->health;
 }

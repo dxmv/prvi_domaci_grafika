@@ -38,6 +38,7 @@
 - [ ] Trail effect behind the ship?
 - [x] Simple post-processing (screen flash on hit)
 - [x] Hearts
+- [ ] Empty hearts?
 - [ ] Restart after 0 hearts
 - [ ] explostion on restart
 - [ ] healing items
