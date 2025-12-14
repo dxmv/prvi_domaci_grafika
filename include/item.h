@@ -12,6 +12,8 @@ typedef struct
     int active;
     int width;
     int height;
+    float scale;
+    int is_growing;
 } item_t;
 
 void items_init(void);

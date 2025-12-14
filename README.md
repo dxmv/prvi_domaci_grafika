@@ -40,8 +40,8 @@
 - [ ] Empty hearts?
 - [x] Restart after 0 hearts
 - [x] spawn healing items
-- [ ] animation healing items
-- [ ] collision healing items
+- [x] animation healing items
+- [x] collision healing items
 - [ ] explostion on restart
 - [ ] cleanups
 

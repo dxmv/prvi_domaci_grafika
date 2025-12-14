@@ -11,9 +11,9 @@
 #include <heart.h>
 #include <item.h>
 
-#define ITEM_SPAWN_INTERVAL_INCREMENT 2
+#define ITEM_SPAWN_INTERVAL_INCREMENT 1
 
-static int item_spawn_interval = 2;
+static int item_spawn_interval = 1;
 static int w, h;
 static rafgl_raster_t raster;
 static rafgl_texture_t tex;
