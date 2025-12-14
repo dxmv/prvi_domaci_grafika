@@ -8,6 +8,7 @@
 #include <laser.h>
 #include <enemies.h>
 #include <collision.h>
+#include <heart.h>
 
 static int w, h;
 static rafgl_raster_t raster;
@@ -38,6 +39,8 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
 
     enemies_init(w,h);
 
+    heart_init(&player);
+
 }
 
 void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *game_data, void *args)
@@ -60,6 +63,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     // kolizije
     check_laser_enemy_collisions();
     check_player_enemy_collisions(&player);
+    heart_update(&player);
     int x,y;
     //    dvostrukom for petljom prolazimo kroz svaki piksel rastera
     //    tacka (0, 0) je gornji levi ugao slike a tacka (w-1, h-1) je donji desni ugao
@@ -85,7 +89,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     lasers_draw(&raster);
     player_draw(&player, &raster);
     enemies_draw(&raster);
-    
+    heart_draw(&player, &raster);
     // beli flashbeng efekat
     if(player.hit_timer > 0)
     {
@@ -131,4 +135,5 @@ void main_state_cleanup(GLFWwindow *window, void *args)
 {
     // stars_cleanup();
     planets_cleanup();
+    heart_cleanup();
 }

@@ -34,15 +34,13 @@
 
 
 ### Additions?
-- [ ] Ship sprite
 - [ ] Particles on hits
-- [ ] Trail effect behind the ship
-- [ ] Pulsing around planets?
-- [ ] Procedural starfield
+- [ ] Trail effect behind the ship?
 - [x] Simple post-processing (screen flash on hit)
-- [ ] Nebulla stripe
-- [ ] Hearts
-- [ ] Display how many enemies killed
-
+- [x] Hearts
+- [ ] Restart after 0 hearts
+- [ ] explostion on restart
+- [ ] healing items
+- [ ] cleanups
 
 

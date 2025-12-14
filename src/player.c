@@ -10,6 +10,7 @@ void player_init(player_t *player, float width, float height)
     player->rotation_speed = 5.0f;
     player->radius = 20.0f;
     player->hit_timer = 0;
+    player->health = 6;
 }
 
 void player_update(player_t *player, float delta_time, const rafgl_game_data_t *game_data)

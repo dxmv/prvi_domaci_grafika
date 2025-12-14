@@ -74,6 +74,7 @@ void check_player_enemy_collisions(player_t *player)
             
             // Set hit timer to flash red for 20 frames
             player->hit_timer = 20;
+            player->health--;
             
             // Start death animation for the enemy
             enemies[i].is_dying = 1;
