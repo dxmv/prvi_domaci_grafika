@@ -16,7 +16,7 @@ int check_collision(float x1, float y1, float r1, float x2, float y2, float r2)
 }
 
 // Check all active lasers against all active enemies
-void check_laser_enemy_collisions(void)
+void check_laser_enemy_collisions(player_t *player)
 {
     laser_t *lasers = lasers_get_all();
     enemy_t *enemies = enemies_get_all();
@@ -40,7 +40,8 @@ void check_laser_enemy_collisions(void)
             if(check_collision(lasers[i].pos_x, lasers[i].pos_y, LASER_RADIUS,
                              enemies[j].pos_x, enemies[j].pos_y, enemy_radius))
             {
-                printf("Hit!\n");
+                printf("Hit! +1 point\n");
+                player->score++;
                 
                 // Start the death animation for the enemy
                 enemies[j].is_dying = 1;
@@ -70,7 +71,8 @@ void check_player_enemy_collisions(player_t *player)
         if(check_collision(player->pos_x, player->pos_y, player->radius,
                          enemies[i].pos_x, enemies[i].pos_y, enemy_radius))
         {
-            printf("Hit!\n");
+            printf("Hit! -1 point\n");
+            player->score--;
             
             // Set hit timer to flash red for 20 frames
             player->hit_timer = 20;

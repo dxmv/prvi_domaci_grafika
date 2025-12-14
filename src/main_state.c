@@ -9,7 +9,11 @@
 #include <enemies.h>
 #include <collision.h>
 #include <heart.h>
+#include <item.h>
 
+#define ITEM_SPAWN_INTERVAL_INCREMENT 2
+
+static int item_spawn_interval = 2;
 static int w, h;
 static rafgl_raster_t raster;
 static rafgl_texture_t tex;
@@ -42,13 +46,14 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
 
     heart_init(&player);
 
+    items_init();
+
 }
 
 void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *game_data, void *args)
 {
     if(game_over)
     {
-        printf("Game over!\n");
         if (game_data->keys_pressed[RAFGL_KEY_R])
         {
             game_over = 0;
@@ -71,9 +76,14 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     lasers_update(delta_time, w, h);
 
     // kolizije
-    check_laser_enemy_collisions();
+    check_laser_enemy_collisions(&player);
     check_player_enemy_collisions(&player);
     heart_update(&player);
+    if(player.score >= item_spawn_interval){
+        items_spawn(&raster);
+        item_spawn_interval += ITEM_SPAWN_INTERVAL_INCREMENT;
+    }
+    items_update(delta_time);
     int x,y;
     //    dvostrukom for petljom prolazimo kroz svaki piksel rastera
     //    tacka (0, 0) je gornji levi ugao slike a tacka (w-1, h-1) je donji desni ugao
@@ -100,6 +110,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     player_draw(&player, &raster);
     enemies_draw(&raster);
     heart_draw(&player, &raster);
+    items_draw(&raster);
     if(player.health <= 0)
     {
         main_state_reset_run();
@@ -152,21 +163,24 @@ void main_state_cleanup(GLFWwindow *window, void *args)
     // stars_cleanup();
     planets_cleanup();
     heart_cleanup();
+    items_cleanup();
 }
 
 void main_state_reset_run(void)
 {
-    // Clean up heart array before reinitializing
+    // cleanup
     heart_cleanup();
+    planets_cleanup();
     
-    // Reinitialize game systems
+    // init
     player_init(&player, w, h);
     lasers_init();
     enemies_init(w, h);
-    
-    // Optionally reinitialize background for variety
     stars_init(w, h);
     planets_init(w, h);
     heart_init(&player);
+    items_init();
+    // game over logika
     game_over = 1;
+    printf("Game over!\n");
 }

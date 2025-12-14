@@ -11,6 +11,7 @@ void player_init(player_t *player, float width, float height)
     player->radius = 20.0f;
     player->hit_timer = 0;
     player->health = 1;
+    player->score = 0;
 }
 
 void player_update(player_t *player, float delta_time, const rafgl_game_data_t *game_data)

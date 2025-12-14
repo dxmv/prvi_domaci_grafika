@@ -13,6 +13,7 @@ typedef struct
     float radius;
     int hit_timer;  // frames remaining for red flash effect
     int health;
+    int score;
 } player_t;
 
 void player_init(player_t *player, float start_x, float start_y);

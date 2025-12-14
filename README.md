@@ -35,13 +35,17 @@
 
 ### Additions?
 - [ ] Particles on hits
-- [ ] Trail effect behind the ship?
 - [x] Simple post-processing (screen flash on hit)
 - [x] Hearts
 - [ ] Empty hearts?
-- [ ] Restart after 0 hearts
+- [x] Restart after 0 hearts
+- [x] spawn healing items
+- [ ] animation healing items
+- [ ] collision healing items
 - [ ] explostion on restart
-- [ ] healing items
 - [ ] cleanups
+
+- [ ] Enemies killed at end?
+- [ ] Trail effect behind the ship?
 
 
