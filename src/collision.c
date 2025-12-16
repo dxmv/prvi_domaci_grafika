@@ -105,6 +105,8 @@ void check_player_item_collisions(player_t *player)
             {
                 printf("+1 health\n");
                 player->health++;
+                // Set heal timer to flash green for 20 frames
+                player->heal_timer = 20;
             }
             else
             {

@@ -10,16 +10,21 @@ void player_init(player_t *player, float width, float height)
     player->rotation_speed = 5.0f;
     player->radius = 20.0f;
     player->hit_timer = 0;
+    player->heal_timer = 0;
     player->health = 4;
     player->score = 0;
 }
 
 void player_update(player_t *player, float delta_time, const rafgl_game_data_t *game_data)
 {
-    // Decrement hit timer every frame
     if(player->hit_timer > 0)
     {
         player->hit_timer--;
+    }
+    
+    if(player->heal_timer > 0)
+    {
+        player->heal_timer--;
     }
     
     if(game_data->keys_down[RAFGL_KEY_A])
@@ -62,6 +67,11 @@ void player_draw(const player_t *player, rafgl_raster_t *raster)
     {
         // Flash red when hit
         ship_color = rafgl_RGB(255, 0, 0);
+    }
+    else if(player->heal_timer > 0)
+    {
+        // Flash green when healed
+        ship_color = rafgl_RGB(0, 255, 0);
     }
     else
     {
