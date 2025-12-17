@@ -38,7 +38,7 @@ void planets_init(int screen_width, int screen_height)
     planets[1].orbit_center_y = center_y + (center_y / 2);
     planets[1].orbit_radius = 120.0f;
     planets[1].orbit_speed = 0.15f;
-    planets[1].orbit_angle = 1.0f;  // pocinje sa druge strane
+    planets[1].orbit_angle = 1.0f;  
     planets[1].pos_x = planets[1].orbit_center_x + cosf(planets[1].orbit_angle) * planets[1].orbit_radius;
     planets[1].pos_y = planets[1].orbit_center_y + sinf(planets[1].orbit_angle) * planets[1].orbit_radius;
     planets[1].current_frame = 0.0f;

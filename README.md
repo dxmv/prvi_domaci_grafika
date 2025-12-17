@@ -54,7 +54,7 @@
 - [x] particles
 - [x] lasers
 - [x] player
-- [ ] planet
-- [ ] collision
+- [x] planet
+- [x] collision
 - [x] main
 
