@@ -6,6 +6,8 @@ static const float LASER_SPEED = 500.0f;
 static const float LASER_LENGTH = 20.0f;
 static const float LASER_EXPANSION_RATE = 5.0f;
 static const float LASER_MAX_WIDTH = 50.0f;
+static const int THICKNESS = 1;
+
 
 void lasers_init(void)
 {
@@ -78,8 +80,7 @@ void lasers_update(float delta_time, int screen_width, int screen_height)
 
 void lasers_draw(rafgl_raster_t *raster)
 {
-    uint32_t laser_color = rafgl_RGB(255, 0, 0); 
-    
+    float brightness[4] = {1.0f, 0.6f, 0.25f, 0.15f};
     for(int i = 0; i < MAX_LASERS; i++)
     {
         if(!lasers[i].active)
@@ -89,14 +90,34 @@ void lasers_draw(rafgl_raster_t *raster)
         
         laser_t *laser = &lasers[i];
         
-        // ugao
         float angle = atan2f(laser->vel_y, laser->vel_x);
         
-        // crtaj laser kao liniju u smeru kretanja
         float end_x = laser->pos_x + cosf(angle) * LASER_LENGTH * laser->current_width;
         float end_y = laser->pos_y + sinf(angle) * LASER_LENGTH * laser->current_width;
 
-        rafgl_raster_draw_line(raster, (int)laser->pos_x, (int)laser->pos_y, (int)end_x, (int)end_y, laser_color);
+        // glow efekat - crtamo od spolja ka unutra (dim -> bright)
+        for(int layer = 3; layer >= 0; layer--)
+        {
+            float brightness_factor = brightness[layer];
+            uint32_t layer_color = rafgl_RGB(
+                (int)(255 * brightness_factor), 
+                (int)(0 ), 
+                (int)(0 )
+            );
+            
+            int thickness = layer * THICKNESS;
+            for(int j = -thickness; j <= thickness; j++)
+            {
+                float offset_x = cosf(angle + M_PI / 2) * j;
+                float offset_y = sinf(angle + M_PI / 2) * j;
+                rafgl_raster_draw_line(raster, 
+                    (int)(laser->pos_x + offset_x), 
+                    (int)(laser->pos_y + offset_y), 
+                    (int)(end_x + offset_x), 
+                    (int)(end_y + offset_y), 
+                    layer_color);
+            }
+        }
     }
 }
 
