@@ -45,7 +45,7 @@ void items_update(float delta_time)
             continue;
         }
         
-        // Simple pulse animation
+        // povecavanje i smanjivanje
         if(items[i].is_growing)
         {
             items[i].scale += scale_increment * delta_time;

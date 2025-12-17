@@ -96,12 +96,7 @@ void lasers_draw(rafgl_raster_t *raster)
         float end_x = laser->pos_x + cosf(angle) * LASER_LENGTH * laser->current_width;
         float end_y = laser->pos_y + sinf(angle) * LASER_LENGTH * laser->current_width;
 
-        // vise linija paralelno da napravimo debljinu
-        int thickness = 1;
-        for(int i = -thickness; i <= thickness; i++)
-        {
-            rafgl_raster_draw_line(raster, (int)laser->pos_x, (int)laser->pos_y + i, (int)end_x, (int)end_y + i, laser_color);
-        }
+        rafgl_raster_draw_line(raster, (int)laser->pos_x, (int)laser->pos_y, (int)end_x, (int)end_y, laser_color);
     }
 }
 

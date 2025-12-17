@@ -71,7 +71,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     enemies_update(delta_time, &player);
     player_update(&player, delta_time, game_data);
 
-    // handle laser input
+    // handlujemo laser
     if(game_data->keys_pressed[RAFGL_KEY_SPACE])
     {
         lasers_spawn(&player);
@@ -85,6 +85,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     check_player_enemy_collisions(&player);
     check_player_item_collisions(&player);
     heart_update(&player);
+    // spawnujemo iteme
     if(player.score >= item_spawn_interval){
         items_spawn(&raster);
         item_spawn_interval += ITEM_SPAWN_INTERVAL_INCREMENT;
@@ -97,7 +98,6 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
         float normalized_y = (float)y / h;
         for(x = 0; x < w; x++)
         {
-            // Gradient from dark blue/purple (top) to black (bottom)
             pixel_at_m(raster, x, y).rgba = rafgl_RGB(
                 0, 
                 (int)(20 * normalized_y), 
@@ -123,25 +123,15 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     // beli flashbeng efekat
     if(player.hit_timer > 0)
     {
-        float intensity;
-        int flash_alpha;
-        rafgl_pixel_rgb_t current;
-        
-        intensity = (float)player.hit_timer / 20.0f;
-        flash_alpha = (int)(intensity * 180.0f); 
+        float intensity = (float)player.hit_timer / 20.0f;
+        float flash_scale = intensity * 180.0f / 255.0f;
+        rafgl_pixel_rgb_t white = {.rgba = rafgl_RGB(255, 255, 255)};
         
         for(y = 0; y < h; y++)
         {
             for(x = 0; x < w; x++)
             {
-                current = pixel_at_m(raster, x, y);
-                
-                // blendovanje bele svjetlosti sa trenutnim pikselom
-                current.r = current.r + (255 - current.r) * flash_alpha / 255;
-                current.g = current.g + (255 - current.g) * flash_alpha / 255;
-                current.b = current.b + (255 - current.b) * flash_alpha / 255;
-                
-                pixel_at_m(raster, x, y) = current;
+                pixel_at_m(raster, x, y) = rafgl_lerppix(pixel_at_m(raster, x, y), white, flash_scale);
             }
         }
     }

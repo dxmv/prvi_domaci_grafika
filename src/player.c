@@ -53,6 +53,7 @@ void player_draw(const player_t *player, rafgl_raster_t *raster)
     float cos_a = cosf(player->angle);
     float sin_a = sinf(player->angle);
 
+    // ostar ugao - pokazuje u smeru kretanja
     int x0 = player->pos_x + player->radius * cos_a;
     int y0 = player->pos_y + player->radius * sin_a;
 

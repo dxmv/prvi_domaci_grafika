@@ -48,4 +48,13 @@
 - [ ] Enemies killed at end?
 - [ ] Trail effect behind the ship?
 
+- [x] stars
+- [x] enemmies
+- [x] item
+- [x] particles
+- [x] lasers
+- [x] player
+- [ ] planet
+- [ ] collision
+- [x] main
 
