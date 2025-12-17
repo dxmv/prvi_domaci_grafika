@@ -58,3 +58,6 @@
 - [x] collision
 - [x] main
 
+- [ ] Obrisati AGENTS.md
+- [ ] Promenti readme
+

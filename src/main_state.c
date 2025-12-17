@@ -113,7 +113,6 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     particles_draw(&raster);
     player_draw(&player, &raster);
     enemies_draw(&raster);
-    heart_draw(&player, &raster);
     items_draw(&raster);
     if(player.health <= 0)
     {
@@ -135,6 +134,49 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
             }
         }
     }
+    
+    // crveni efekat kada je health manji od 2
+    if(player.health <= 2 && player.hit_timer == 0)
+    {
+        float health_ratio = (float)player.health / 4.0f;
+        float red_intensity = (1.0f - health_ratio) * 0.3f;
+        rafgl_pixel_rgb_t red = {.rgba = rafgl_RGB(255, 0, 0)};
+        
+        for(y = 0; y < h; y++)
+        {
+            for(x = 0; x < w; x++)
+            {
+                pixel_at_m(raster, x, y) = rafgl_lerppix(pixel_at_m(raster, x, y), red, red_intensity);
+            }
+        }
+    }
+    
+    // vignette efekat - tamnjenje ivica ekrana
+    float center_x = w / 2.0f;
+    float center_y = h / 2.0f;
+    float max_dist = sqrtf(center_x * center_x + center_y * center_y);
+    
+    for(y = 0; y < h; y++)
+    {
+        for(x = 0; x < w; x++)
+        {
+            float dx = x - center_x;
+            float dy = y - center_y;
+            float dist = sqrtf(dx * dx + dy * dy);
+            float vignette = 1.0f - (dist / max_dist) * 0.6f;
+            
+            if(vignette < 0.5f) vignette = 0.5f;
+            
+            rafgl_pixel_rgb_t p = pixel_at_m(raster, x, y);
+            p.r = (int)(p.r * vignette);
+            p.g = (int)(p.g * vignette);
+            p.b = (int)(p.b * vignette);
+            pixel_at_m(raster, x, y) = p;
+        }
+    }
+    // ovo na kraju da ne bi imao vignette efek
+    heart_draw(&player, &raster);
+
 
 }
 
