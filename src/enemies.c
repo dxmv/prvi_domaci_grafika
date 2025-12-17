@@ -61,7 +61,7 @@ void enemies_update(float delta_time, player_t *player)
                 }
                 
                 enemies[i].size = 15.0f;
-                enemies[i].speed = 50.0f + (rand() % 50);  // Random speed between 50-100
+                enemies[i].speed = 50.0f + (rand() % 50);  // 50 - 100 brzina
                 enemies[i].scale = 1.0f;
                 enemies[i].alpha = 1.0f;
                 enemies[i].is_dying = 0;

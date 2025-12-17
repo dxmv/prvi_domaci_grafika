@@ -11,8 +11,8 @@ typedef struct
     float speed;
     float rotation_speed;
     float radius;
-    int hit_timer;  // frames remaining for red flash effect
-    int heal_timer; // frames remaining for green flash effect
+    int hit_timer;  
+    int heal_timer; 
     int health;
     int score;
 } player_t;

@@ -12,9 +12,9 @@ typedef struct
     float pos_y;
     float size;
     float speed;
-    float scale;      // for scaling effect when dying
-    float alpha;      // for transparency effect when dying
-    int is_dying;     // boolean flag for death animation
+    float scale;      
+    float alpha;      
+    int is_dying;     
     int active;
 } enemy_t;
 

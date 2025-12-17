@@ -93,7 +93,6 @@ void particles_draw(rafgl_raster_t *raster)
 
 void particles_cleanup(void)
 {
-    // Reset all particles
     for(int i = 0; i < MAX_PARTICLES; i++)
     {
         particles[i].life = 0;

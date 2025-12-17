@@ -10,4 +10,4 @@ void main_state_render(GLFWwindow *window, void *args);
 void main_state_cleanup(GLFWwindow *window, void *args);
 void main_state_reset_run(void);
 
-#endif // MAIN_STATE_H_INCLUDED
+#endif 

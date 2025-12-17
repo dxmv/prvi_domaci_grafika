@@ -10,7 +10,6 @@ typedef struct
     float pos_x;
     float pos_y;
     float radius;
-    // Orbital parameters
     float orbit_center_x;
     float orbit_center_y;
     float orbit_radius;
