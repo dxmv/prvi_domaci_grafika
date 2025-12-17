@@ -65,17 +65,16 @@ void player_draw(const player_t *player, rafgl_raster_t *raster)
     uint32_t ship_color;
     if(player->hit_timer > 0)
     {
-        // Flash red when hit
+        // crveni hit
         ship_color = rafgl_RGB(255, 0, 0);
     }
     else if(player->heal_timer > 0)
     {
-        // Flash green when healed
+        // zeleni heal
         ship_color = rafgl_RGB(0, 255, 0);
     }
     else
     {
-        // Normal white color
         ship_color = rafgl_RGB(255, 255, 255);
     }
 

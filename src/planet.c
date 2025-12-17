@@ -84,7 +84,6 @@ void planets_draw(rafgl_raster_t *raster)
         int draw_x = (int)p->pos_x - sprite->frame_width / 2;
         int draw_y = (int)p->pos_y - sprite->frame_height / 2;
         
-        // frame je kolona (0-49), row je uvek 0
         rafgl_raster_draw_spritesheet(raster, sprite, frame, 0, draw_x, draw_y);
     }
 }
