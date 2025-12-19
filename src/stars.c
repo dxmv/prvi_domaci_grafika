@@ -1,6 +1,7 @@
 #include <stars.h>
 #include <math.h>
 #include <stdlib.h>
+#include <screen_shake.h>
 
 static int width;
 static int height;
@@ -76,6 +77,8 @@ void stars_update(float delta_time)
 // crtamo zvezde 
 void stars_draw(rafgl_raster_t *raster)
 {
+    float shake_x, shake_y;
+    screen_shake_get_offset(&shake_x, &shake_y);
     for(int i = 0; i < MAX_STARS; i++)
     {
         star_t *star = &stars[i];
@@ -94,14 +97,19 @@ void stars_draw(rafgl_raster_t *raster)
             continue;
         }
         // crtamo ili kao krug ili kao pixel
+        int draw_x = (int)(star->pos_x + shake_x);
+        int draw_y = (int)(star->pos_y + shake_y);
+        if(draw_x < 0 || draw_x >= raster->width || draw_y < 0 || draw_y >= raster->height)
+        {
+            continue;
+        }
         if(star->size > 1.5f)
         {
-            rafgl_raster_draw_circle(raster, star->pos_x, star->pos_y, (int)star->size, star_color);
+            rafgl_raster_draw_circle(raster, draw_x, draw_y, (int)star->size, star_color);
         }
         else
         {
-            pixel_at_pm(raster, (int)star->pos_x, (int)star->pos_y).rgba = star_color;
+            pixel_at_pm(raster, draw_x, draw_y).rgba = star_color;
         }
     }
 }
-

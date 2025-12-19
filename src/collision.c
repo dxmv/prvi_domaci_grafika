@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <particles.h>
+#include <screen_shake.h>
 
 // kolizija krugova
 int check_collision(float x1, float y1, float r1, float x2, float y2, float r2)
@@ -46,6 +47,7 @@ void check_laser_enemy_collisions(player_t *player)
                 lasers[i].active = 0;
                 
                 particles_spawn(enemies[j].pos_x, enemies[j].pos_y, 20, 10.0f);
+                screen_shake_trigger(0.25f, 8.0f);
                 
                 break;  // laser moze samo da udari 1 neprijatelja
             }
@@ -75,6 +77,7 @@ void check_player_enemy_collisions(player_t *player)
             if(player->health < 0){
                 player->health = 0;
             }
+            screen_shake_trigger(0.35f, 12.0f);
             
             // animacija umiranja
             enemies[i].is_dying = 1;

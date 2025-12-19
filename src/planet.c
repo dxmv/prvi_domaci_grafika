@@ -1,6 +1,7 @@
 #include <planets.h>
 #include <math.h>
 #include <stdlib.h>
+#include <screen_shake.h>
 
 static int width;
 static int height;
@@ -70,6 +71,8 @@ void planets_update(float delta_time)
 
 void planets_draw(rafgl_raster_t *raster)
 {
+    float shake_x, shake_y;
+    screen_shake_get_offset(&shake_x, &shake_y);
     for(int i = 0; i < MAX_PLANETS; i++)
     {
         planet_t *p = &planets[i];
@@ -81,8 +84,8 @@ void planets_draw(rafgl_raster_t *raster)
         int frame = (int)p->current_frame;
         
         // crtaj sprite centriran na poziciji planete
-        int draw_x = (int)p->pos_x - sprite->frame_width / 2;
-        int draw_y = (int)p->pos_y - sprite->frame_height / 2;
+        int draw_x = (int)(p->pos_x + shake_x) - sprite->frame_width / 2;
+        int draw_y = (int)(p->pos_y + shake_y) - sprite->frame_height / 2;
         
         rafgl_raster_draw_spritesheet(raster, sprite, frame, 0, draw_x, draw_y);
     }

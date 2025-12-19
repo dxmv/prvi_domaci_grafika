@@ -1,6 +1,7 @@
 #include <enemies.h>
 #include <math.h>
 #include <stdlib.h>
+#include <screen_shake.h>
 
 static int width;
 static int height;
@@ -120,6 +121,8 @@ void enemies_update(float delta_time, player_t *player)
 
 void enemies_draw(rafgl_raster_t *raster)
 {
+    float shake_x, shake_y;
+    screen_shake_get_offset(&shake_x, &shake_y);
     for(int i = 0; i < MAX_ENEMIES; i++)
     {
         if(!enemies[i].active)
@@ -133,10 +136,10 @@ void enemies_draw(rafgl_raster_t *raster)
         
         // crtamo neprijatelja kao ispunjeni crveni pravougaonik sa scaling i alpha
         int half_size = (int)(scaled_size / 2.0f);
-        int x1 = (int)(e->pos_x - half_size);
-        int y1 = (int)(e->pos_y - half_size);
-        int x2 = (int)(e->pos_x + half_size);
-        int y2 = (int)(e->pos_y + half_size);
+        int x1 = (int)(e->pos_x + shake_x - half_size);
+        int y1 = (int)(e->pos_y + shake_y - half_size);
+        int x2 = (int)(e->pos_x + shake_x + half_size);
+        int y2 = (int)(e->pos_y + shake_y + half_size);
         
         // ispunjeni kvadrat sa alpha
         for(int y = y1; y <= y2; y++)
@@ -164,4 +167,3 @@ enemy_t* enemies_get_all(void)
 {
     return enemies;
 }
-

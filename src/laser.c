@@ -1,5 +1,6 @@
 #include <laser.h>
 #include <math.h>
+#include <screen_shake.h>
 
 static laser_t lasers[MAX_LASERS];
 static const float LASER_SPEED = 500.0f;
@@ -80,6 +81,8 @@ void lasers_update(float delta_time, int screen_width, int screen_height)
 
 void lasers_draw(rafgl_raster_t *raster)
 {
+    float shake_x, shake_y;
+    screen_shake_get_offset(&shake_x, &shake_y);
     float brightness[4] = {1.0f, 0.6f, 0.25f, 0.15f};
     for(int i = 0; i < MAX_LASERS; i++)
     {
@@ -92,8 +95,10 @@ void lasers_draw(rafgl_raster_t *raster)
         
         float angle = atan2f(laser->vel_y, laser->vel_x);
         
-        float end_x = laser->pos_x + cosf(angle) * LASER_LENGTH * laser->current_width;
-        float end_y = laser->pos_y + sinf(angle) * LASER_LENGTH * laser->current_width;
+        float start_x = laser->pos_x + shake_x;
+        float start_y = laser->pos_y + shake_y;
+        float end_x = start_x + cosf(angle) * LASER_LENGTH * laser->current_width;
+        float end_y = start_y + sinf(angle) * LASER_LENGTH * laser->current_width;
 
         // glow efekat - crtamo od spolja ka unutra (dim -> bright)
         for(int layer = 3; layer >= 0; layer--)
@@ -111,8 +116,8 @@ void lasers_draw(rafgl_raster_t *raster)
                 float offset_x = cosf(angle + M_PI / 2) * j;
                 float offset_y = sinf(angle + M_PI / 2) * j;
                 rafgl_raster_draw_line(raster, 
-                    (int)(laser->pos_x + offset_x), 
-                    (int)(laser->pos_y + offset_y), 
+                    (int)(start_x + offset_x), 
+                    (int)(start_y + offset_y), 
                     (int)(end_x + offset_x), 
                     (int)(end_y + offset_y), 
                     layer_color);

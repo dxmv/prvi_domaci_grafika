@@ -1,5 +1,6 @@
 #include <player.h>
 #include <math.h>
+#include <screen_shake.h>
 
 void player_init(player_t *player, float width, float height)
 {
@@ -52,16 +53,20 @@ void player_draw(const player_t *player, rafgl_raster_t *raster)
 {
     float cos_a = cosf(player->angle);
     float sin_a = sinf(player->angle);
+    float shake_x, shake_y;
+    screen_shake_get_offset(&shake_x, &shake_y);
+    float base_x = player->pos_x + shake_x;
+    float base_y = player->pos_y + shake_y;
 
     // ostar ugao - pokazuje u smeru kretanja
-    int x0 = player->pos_x + player->radius * cos_a;
-    int y0 = player->pos_y + player->radius * sin_a;
+    int x0 = (int)(base_x + player->radius * cos_a);
+    int y0 = (int)(base_y + player->radius * sin_a);
 
-    int x1 = player->pos_x + (-player->radius * cos_a - player->radius * 0.5f * sin_a);
-    int y1 = player->pos_y + (-player->radius * sin_a + player->radius * 0.5f * cos_a);
+    int x1 = (int)(base_x + (-player->radius * cos_a - player->radius * 0.5f * sin_a));
+    int y1 = (int)(base_y + (-player->radius * sin_a + player->radius * 0.5f * cos_a));
 
-    int x2 = player->pos_x + (-player->radius * cos_a + player->radius * 0.5f * sin_a);
-    int y2 = player->pos_y + (-player->radius * sin_a - player->radius * 0.5f * cos_a);
+    int x2 = (int)(base_x + (-player->radius * cos_a + player->radius * 0.5f * sin_a));
+    int y2 = (int)(base_y + (-player->radius * sin_a - player->radius * 0.5f * cos_a));
 
     uint32_t ship_color;
     if(player->hit_timer > 0)

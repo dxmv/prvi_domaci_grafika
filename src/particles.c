@@ -1,5 +1,6 @@
 #include <particles.h>
 #include <math.h>
+#include <screen_shake.h>
 
 static particle_t particles[MAX_PARTICLES];
 static float elasticity = 0.6f;
@@ -82,12 +83,19 @@ void particles_update(float delta_time)
 
 void particles_draw(rafgl_raster_t *raster)
 {
+    float shake_x, shake_y;
+    screen_shake_get_offset(&shake_x, &shake_y);
     particle_t p;
     for(int i = 0; i < MAX_PARTICLES; i++)
     {
         p = particles[i];
         if(p.life <= 0) continue;
-        rafgl_raster_draw_line(raster, p.x - p.dx, p.y - p.dy, p.x, p.y, rafgl_RGB(255, 255, 255));
+        rafgl_raster_draw_line(raster, 
+            (int)(p.x + shake_x - p.dx), 
+            (int)(p.y + shake_y - p.dy), 
+            (int)(p.x + shake_x), 
+            (int)(p.y + shake_y), 
+            rafgl_RGB(255, 255, 255));
     }
 }
 

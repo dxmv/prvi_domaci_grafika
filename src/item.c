@@ -1,4 +1,5 @@
 #include <item.h>
+#include <screen_shake.h>
 
 static item_t items[MAX_ITEMS];
 static int base_width = 32;
@@ -69,6 +70,8 @@ void items_update(float delta_time)
 
 void items_draw(rafgl_raster_t *raster)
 {
+    float shake_x, shake_y;
+    screen_shake_get_offset(&shake_x, &shake_y);
     for(int i = 0; i < MAX_ITEMS; i++)
     {
         if(!items[i].active)
@@ -77,8 +80,8 @@ void items_draw(rafgl_raster_t *raster)
         }
         int width = (int)(items[i].width * items[i].scale);
         int height = (int)(items[i].height * items[i].scale);
-        int x = items[i].pos_x - width / 2;
-        int y = items[i].pos_y - height / 2;
+        int x = (int)(items[i].pos_x + shake_x) - width / 2;
+        int y = (int)(items[i].pos_y + shake_y) - height / 2;
         rafgl_raster_draw_rectangle(raster, x, y, width, height, rafgl_RGB(0, 255, 0));
     }
 }

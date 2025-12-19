@@ -11,6 +11,7 @@
 #include <heart.h>
 #include <item.h>
 #include <particles.h>
+#include <screen_shake.h>
 
 #define ITEM_SPAWN_INTERVAL_INCREMENT 1
 #define ITEM_SPAWN_INTERVAL_START 1
@@ -30,6 +31,7 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
     w = width;
     h = height;
     item_spawn_interval = ITEM_SPAWN_INTERVAL_START;
+    screen_shake_reset();
 
     // inicijalizacija rastera na w*h piksela (u ovom primeru na 256*256)
     rafgl_raster_init(&raster, w, h);
@@ -60,6 +62,7 @@ void main_state_init(GLFWwindow *window, void *args, int width, int height)
 
 void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *game_data, void *args)
 {
+    screen_shake_update(delta_time);
     if(game_over)
     {
         if (game_data->keys_pressed[RAFGL_KEY_R])
@@ -116,8 +119,20 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     int x,y;
     //    dvostrukom for petljom prolazimo kroz svaki piksel rastera
     //    tacka (0, 0) je gornji levi ugao slike a tacka (w-1, h-1) je donji desni ugao
+    float shake_x, shake_y;
+    screen_shake_get_offset(&shake_x, &shake_y);
+
     for(y=0; y<h; y++){
-        float normalized_y = (float)y / h;
+        float sample_y = (float)y - shake_y;
+        if(sample_y < 0.0f)
+        {
+            sample_y = 0.0f;
+        }
+        if(sample_y > (float)(h - 1))
+        {
+            sample_y = (float)(h - 1);
+        }
+        float normalized_y = sample_y / h;
         for(x = 0; x < w; x++)
         {
             pixel_at_m(raster, x, y).rgba = rafgl_RGB(
@@ -242,6 +257,7 @@ void main_state_reset_run(void)
     particles_init(w,h);
     slowmo_timer = 0.0f;
     item_spawn_interval = ITEM_SPAWN_INTERVAL_START;
+    screen_shake_reset();
     // game over logika
     game_over = 1;
     printf("Game over!\n");
