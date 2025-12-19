@@ -13,18 +13,23 @@
 #include <particles.h>
 
 #define ITEM_SPAWN_INTERVAL_INCREMENT 1
+#define ITEM_SPAWN_INTERVAL_START 1
+#define SLOWMO_DURATION 1.5f
+#define SLOWMO_SCALE 0.35f
 
-static int item_spawn_interval = 1;
+static int item_spawn_interval = ITEM_SPAWN_INTERVAL_START;
 static int w, h;
 static rafgl_raster_t raster;
 static rafgl_texture_t tex;
 static player_t player;
 static int game_over = 0;
+static float slowmo_timer = 0.0f;
 
 void main_state_init(GLFWwindow *window, void *args, int width, int height)
 {
     w = width;
     h = height;
+    item_spawn_interval = ITEM_SPAWN_INTERVAL_START;
 
     // inicijalizacija rastera na w*h piksela (u ovom primeru na 256*256)
     rafgl_raster_init(&raster, w, h);
@@ -65,20 +70,37 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
     }
 
 
+    if(game_data->keys_pressed[RAFGL_KEY_F])
+    {
+        slowmo_timer = SLOWMO_DURATION;
+    }
+
+    if(slowmo_timer > 0.0f)
+    {
+        slowmo_timer -= delta_time;
+        if(slowmo_timer < 0.0f)
+        {
+            slowmo_timer = 0.0f;
+        }
+    }
+
+    float slowmo_factor = (slowmo_timer > 0.0f) ? SLOWMO_SCALE : 1.0f;
+    float effective_dt = delta_time * slowmo_factor;
+
     // updatujemo stvari ovde
-    stars_update(delta_time);
-    planets_update(delta_time);
-    enemies_update(delta_time, &player);
-    player_update(&player, delta_time, game_data);
+    stars_update(effective_dt);
+    planets_update(effective_dt);
+    enemies_update(effective_dt, &player);
+    player_update(&player, effective_dt, game_data);
 
     // handlujemo laser
     if(game_data->keys_pressed[RAFGL_KEY_SPACE])
     {
         lasers_spawn(&player);
     }
-    lasers_update(delta_time, w, h);
+    lasers_update(effective_dt, w, h);
 
-    particles_update(delta_time);
+    particles_update(effective_dt);
 
     // kolizije
     check_laser_enemy_collisions(&player);
@@ -90,7 +112,7 @@ void main_state_update(GLFWwindow *window, float delta_time, rafgl_game_data_t *
         items_spawn(&raster);
         item_spawn_interval += ITEM_SPAWN_INTERVAL_INCREMENT;
     }
-    items_update(delta_time);
+    items_update(effective_dt);
     int x,y;
     //    dvostrukom for petljom prolazimo kroz svaki piksel rastera
     //    tacka (0, 0) je gornji levi ugao slike a tacka (w-1, h-1) je donji desni ugao
@@ -218,6 +240,8 @@ void main_state_reset_run(void)
     heart_init(&player);
     items_init();
     particles_init(w,h);
+    slowmo_timer = 0.0f;
+    item_spawn_interval = ITEM_SPAWN_INTERVAL_START;
     // game over logika
     game_over = 1;
     printf("Game over!\n");
