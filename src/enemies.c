@@ -85,7 +85,6 @@ void enemies_update(float delta_time, player_t *player)
             e->scale -= 0.05f;
             e->alpha -= 0.05f;
             
-            // ako je alpha < 0, deaktiviramo neprijatelja
             if(e->alpha <= 0.0f)
             {
                 e->active = 0;
@@ -93,15 +92,15 @@ void enemies_update(float delta_time, player_t *player)
                 e->scale = 1.0f;
                 e->alpha = 1.0f;
             }
-            continue;  // ne pomeramo neprijatelja dok se ne umre
+            continue;
         }
         
-        // izracunamo vektor smera ka player-u
+        // izracunamo vektor smera ka playeru
         float dx = player->pos_x - e->pos_x;
         float dy = player->pos_y - e->pos_y;
         float distance = sqrtf(dx * dx + dy * dy);
         
-        // normalizujemo i pomeramo se ka player-u
+        // normalizujemo i pomeramo se ka playeru
         if(distance > 0.1f)
         {
             dx /= distance;
@@ -134,14 +133,12 @@ void enemies_draw(rafgl_raster_t *raster)
         
         rafgl_pixel_rgb_t red_color = {.rgba = rafgl_RGB(255, 0, 0)};
         
-        // crtamo neprijatelja kao ispunjeni crveni pravougaonik sa scaling i alpha
         int half_size = (int)(scaled_size / 2.0f);
         int x1 = (int)(e->pos_x + shake_x - half_size);
         int y1 = (int)(e->pos_y + shake_y - half_size);
         int x2 = (int)(e->pos_x + shake_x + half_size);
         int y2 = (int)(e->pos_y + shake_y + half_size);
         
-        // ispunjeni kvadrat sa alpha
         for(int y = y1; y <= y2; y++)
         {
             for(int x = x1; x <= x2; x++)
